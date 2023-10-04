@@ -1,0 +1,2 @@
+NroCheque,CodigoBanco,CodigoScurusal,NumeroCuentaOrigen,NumeroCuentaDestino,Valor,FechaOrigen,FechaPago,DNI,Tipo,Estado
+0011,1,12,23123132,12312312,5000,1617591371,1617591371,1617591371,EMITIDO,APROBADO
