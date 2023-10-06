@@ -2,20 +2,27 @@ import csv
 import sys
 import datetime
 
+def timestamp_to_datetime(timestamp):
+    return datetime.datetime.fromtimestamp(int(timestamp))
+
+def format_datetime(dt_obj):
+    return dt_obj.strftime('%Y-%m-%d %H:%M:%S')
+
 # Validar que se proporcionen suficientes argumentos
 if len(sys.argv) < 5:
     print("Uso: python script.py <filename> <dni_a_filtrar> <pantalla_o_csv> <tipo> [estado] [fecha_a_filtrar]")
     sys.exit(1)
 
-# Obtener argumentos de la línea de comandos
+# DATOS OBLIGATORIOS
 filename = sys.argv[1]
 dni_a_filtrar = sys.argv[2]
 pantalla_o_csv = sys.argv[3]
 tipo = sys.argv[4]
+# OPCIONALES
 estado = None
 fecha_a_filtrar = None
 
-# Leer argumentos opcionales si están presentes
+# Leer argumentos opcionales
 if len(sys.argv) > 5:
     estado = sys.argv[5]
 
@@ -27,7 +34,7 @@ with open(filename, "r") as file:
     reader = csv.DictReader(file)
     datos = [row for row in reader]
 
-# Filtrar los datos según los criterios especificados
+# Filtrar los datos 
 datos_filtrados = [dato for dato in datos if dato['DNI'] == dni_a_filtrar]
 datos_filtrados = [dato for dato in datos_filtrados if dato['Tipo'] == tipo]
 
@@ -49,9 +56,11 @@ if pantalla_o_csv == 'CSV':
         writer.writerows(datos_filtrados)
     print(f"Datos filtrados guardados en {output_filename}")
 
-elif pantalla_o_csv == 'PANTALLA':
+elif pantalla_o_csv == 'PANTALLA':  # Esta es la sección que deseas modificar
     for fila in datos_filtrados:
+        fila['FechaOrigen'] = format_datetime(timestamp_to_datetime(fila['FechaOrigen']))
+        fila['FechaPago'] = format_datetime(timestamp_to_datetime(fila['FechaPago']))
         print(f"Fila: {fila}")
+
 else:
     print("Opción incorrecta. Elegir entre 'CSV' o 'PANTALLA'.")
-
